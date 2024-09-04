@@ -165,7 +165,7 @@ namespace Narazaka.VRChat.AvatarStatusWindowMaker.Editor
                 if (layout != null) DestroyImmediate(layout);
             }, null);
 
-            var renderTextureSize = new Vector2Int(Mathf.RoundToInt(size.vector2Value.x), Mathf.RoundToInt(size.vector2Value.y));
+            var renderTextureSize = AvatarStatusWindowMaker.RenderTextureSize(size.vector2Value);
             if (camera.targetTexture == null || camera.targetTexture.width != renderTextureSize.x || camera.targetTexture.height != renderTextureSize.y)
             {
                 if (camera.targetTexture != null)
@@ -175,7 +175,6 @@ namespace Narazaka.VRChat.AvatarStatusWindowMaker.Editor
                     DestroyImmediate(toDestroy);
                 }
                 camera.targetTexture = new RenderTexture(renderTextureSize.x, renderTextureSize.y, 24);
-                camera.orthographicSize = (float)renderTextureSize.y / 1000 / 2;
             }
 
             var active = RenderTexture.active;
