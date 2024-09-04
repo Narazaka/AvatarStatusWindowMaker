@@ -1,0 +1,20 @@
+{
+    "name": "Narazaka.VRChat.AvatarStatusWindowMaker.Editor",
+    "rootNamespace": "",
+    "references": [
+        "nadena.dev.ndmf",
+        "nadena.dev.modular-avatar.core",
+        "Narazaka.VRChat.AvatarStatusWindowMaker"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
