@@ -116,22 +116,21 @@ namespace Narazaka.VRChat.AvatarStatusWindowMaker.Editor
                                 nameOrPrefix = "NumberRate",
                                 syncType = ParameterSyncType.Float,
                                 defaultValue = status.valueRate,
-                                internalParameter = true,
+                                remapTo = $"NumberRate_{status.name}",
                             },
                         };
-                        var menu = valueModel.AddComponent<ModularAvatarMenuItem>();
+                        var menuObj = new GameObject(status.name);
+                        menuObj.transform.SetParent(allMenuGroup);
+                        var menu = menuObj.AddComponent<ModularAvatarMenuItem>();
                         menu.Control.name = status.name;
                         menu.Control.type = VRCExpressionsMenu.Control.ControlType.RadialPuppet;
                         menu.Control.subParameters = new VRCExpressionsMenu.Control.Parameter[]
                         {
                             new ()
                             {
-                                name = "NumberRate",
+                                name = $"NumberRate_{status.name}",
                             },
                         };
-                        var menuGroup = new GameObject(status.name);
-                        menuGroup.transform.SetParent(allMenuGroup);
-                        menuGroup.AddComponent<ModularAvatarMenuGroup>().targetObject = valueModel.transform.parent.gameObject;
                     }
                 }
             });
