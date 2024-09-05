@@ -1,6 +1,6 @@
 {
   "name": "net.narazaka.vrchat.avatar-status-window-maker",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "displayName": "Avatar Status Window Maker",
   "description": "VRChatアバター用にゲームのキャラクターステータスウインドウみたいなやつを作るやつ",
   "author": {
