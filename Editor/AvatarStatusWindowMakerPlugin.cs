@@ -117,6 +117,7 @@ namespace Narazaka.VRChat.AvatarStatusWindowMaker.Editor
                                 syncType = ParameterSyncType.Float,
                                 defaultValue = status.valueRate,
                                 remapTo = $"NumberRate_{status.name}",
+                                saved = status.saved,
                             },
                         };
                         var menuObj = new GameObject(status.name);
@@ -132,6 +133,8 @@ namespace Narazaka.VRChat.AvatarStatusWindowMaker.Editor
                             },
                         };
                     }
+                    avatarStatusWindowMaker.gameObject.SetActive(avatarStatusWindowMaker.defaultActive);
+                    Object.DestroyImmediate(avatarStatusWindowMaker);
                 }
             });
         }

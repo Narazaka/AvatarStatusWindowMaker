@@ -17,6 +17,7 @@ namespace Narazaka.VRChat.AvatarStatusWindowMaker.Editor
         SerializedProperty displayName;
         SerializedProperty size;
         SerializedProperty statuses;
+        SerializedProperty defaultActive;
         MeshRenderer mesh;
         Camera camera;
         Canvas canvas;
@@ -29,6 +30,7 @@ namespace Narazaka.VRChat.AvatarStatusWindowMaker.Editor
             displayName = serializedObject.FindProperty(nameof(AvatarStatusWindowMaker.displayName));
             size = serializedObject.FindProperty(nameof(AvatarStatusWindowMaker.size));
             statuses = serializedObject.FindProperty(nameof(AvatarStatusWindowMaker.statuses));
+            defaultActive = serializedObject.FindProperty(nameof(AvatarStatusWindowMaker.defaultActive));
             var avatarStatusWindowMaker = target as AvatarStatusWindowMaker;
             mesh = avatarStatusWindowMaker.transform.Find("Mesh").GetComponent<MeshRenderer>();
             camera = avatarStatusWindowMaker.transform.Find("Camera").GetComponent<Camera>();
@@ -58,6 +60,7 @@ namespace Narazaka.VRChat.AvatarStatusWindowMaker.Editor
                 if (check.changed) size.vector2Value = new Vector2(size.vector2Value.x, sizeY);
             }
             EditorGUILayout.PropertyField(statuses, true);
+            EditorGUILayout.PropertyField(defaultActive);
 
             if (EditorGUI.EndChangeCheck())
             {
@@ -67,7 +70,7 @@ namespace Narazaka.VRChat.AvatarStatusWindowMaker.Editor
             }
             if (!(target as AvatarStatusWindowMaker).gameObject.activeInHierarchy)
             {
-                EditorGUILayout.HelpBox("編集するときにはアクティブにしてください。\n（編集し終わったら非アクティブにしても大丈夫です。）", MessageType.Warning);
+                EditorGUILayout.HelpBox("オブジェクトをアクティブにしてください。\nデフォルトで非アクティブにしたい場合はDefault Activeをオフにして下さい。", MessageType.Warning);
             }
         }
 

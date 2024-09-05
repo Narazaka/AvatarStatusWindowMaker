@@ -15,13 +15,13 @@ namespace Narazaka.VRChat.AvatarStatusWindowMaker.Editor
             var max = property.FindPropertyRelative(nameof(AvatarStatus.max));
             var value = property.FindPropertyRelative(nameof(AvatarStatus.value));
             var menu = property.FindPropertyRelative(nameof(AvatarStatus.menu));
+            var saved = property.FindPropertyRelative(nameof(AvatarStatus.saved));
 
             var x = position.x;
             var width = position.width;
 
-            EditorGUIUtility.labelWidth = 35;
-            var rect = new Rect(x, position.y, width - 250, position.height);
-            EditorGUI.PropertyField(rect, name);
+            var rect = new Rect(x, position.y, width - 300, position.height);
+            EditorGUI.PropertyField(rect, name, GUIContent.none);
             rect.x += rect.width + 5;
             rect.width = 40;
             EditorGUI.PropertyField(rect, value, GUIContent.none);
@@ -33,7 +33,14 @@ namespace Narazaka.VRChat.AvatarStatusWindowMaker.Editor
             EditorGUI.PropertyField(rect, max);
             EditorGUIUtility.labelWidth = 35;
             rect.x += rect.width + 5;
+            rect.width = 50;
             EditorGUI.PropertyField(rect, menu);
+            EditorGUIUtility.labelWidth = 40;
+            rect.x += rect.width + 5;
+            rect.width = 55;
+            EditorGUI.BeginDisabledGroup(!menu.boolValue);
+            EditorGUI.PropertyField(rect, saved);
+            EditorGUI.EndDisabledGroup();
 
             EditorGUIUtility.labelWidth = 0;
 

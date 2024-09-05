@@ -13,6 +13,7 @@ namespace Narazaka.VRChat.AvatarStatusWindowMaker
         public string displayName = "あなたの名前";
         public Vector2 size = new Vector2(1000, 1000);
         public List<AvatarStatus> statuses = new ();
+        public bool defaultActive = true;
 
         public Vector2Int renderTextureSize => RenderTextureSize(size);
         public float orthographicSize => OrthographicSize(renderTextureSize, transform.lossyScale);
