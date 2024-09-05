@@ -65,6 +65,10 @@ namespace Narazaka.VRChat.AvatarStatusWindowMaker.Editor
 
                 UpdateElements();
             }
+            if (!(target as AvatarStatusWindowMaker).gameObject.activeInHierarchy)
+            {
+                EditorGUILayout.HelpBox("編集するときにはアクティブにしてください。\n（編集し終わったら非アクティブにしても大丈夫です。）", MessageType.Warning);
+            }
         }
 
         void UpdateElements()
@@ -179,7 +183,7 @@ namespace Narazaka.VRChat.AvatarStatusWindowMaker.Editor
 
             var active = RenderTexture.active;
             RenderTexture.active = camera.targetTexture;
-            camera.Render();
+            // camera.Render();
             var resizedRenderTexture = new RenderTexture(1024, 1024, 24);
             RenderTexture.active = resizedRenderTexture;
             Graphics.Blit(camera.targetTexture, resizedRenderTexture);

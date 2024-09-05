@@ -21,7 +21,7 @@ namespace Narazaka.VRChat.AvatarStatusWindowMaker.Editor
         {
             InPhase(BuildPhase.Generating).BeforePlugin("nadena.dev.modular-avatar").Run("Avatar Status Window Maker", (context) =>
             {
-                var avatarStatusWindowMakers = context.AvatarRootTransform.GetComponentsInChildren<AvatarStatusWindowMaker>();
+                var avatarStatusWindowMakers = context.AvatarRootTransform.GetComponentsInChildren<AvatarStatusWindowMaker>(true);
                 foreach (var avatarStatusWindowMaker in avatarStatusWindowMakers)
                 {
                     var canvas = avatarStatusWindowMaker.transform.Find("Canvas");
