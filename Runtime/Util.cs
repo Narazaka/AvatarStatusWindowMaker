@@ -3,7 +3,8 @@ using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
 
-namespace Narazaka.VRChat.AvatarStatusWindowMaker.Editor
+#if UNITY_EDITOR
+namespace Narazaka.VRChat.AvatarStatusWindowMaker
 {
     public static class Util
     {
@@ -67,3 +68,4 @@ namespace Narazaka.VRChat.AvatarStatusWindowMaker.Editor
         }
     }
 }
+#endif

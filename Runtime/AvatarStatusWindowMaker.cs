@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using VRC.SDKBase;
 
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Narazaka.VRChat.AvatarStatusWindowMaker.Editor")]
+
 namespace Narazaka.VRChat.AvatarStatusWindowMaker
 {
     [ExecuteInEditMode]
@@ -32,9 +34,43 @@ namespace Narazaka.VRChat.AvatarStatusWindowMaker
             }
         }
 
+        UpdateElements _updateElements;
+        UpdateElements updateElements
+        {
+            get
+            {
+                if (_updateElements == null) _updateElements = new UpdateElements(this);
+                return _updateElements;
+            }
+        }
+
+        bool needUpdateLayoutAndCamera;
+        bool needUpdateTexture;
+
         void Update()
         {
             childCamera.orthographicSize = orthographicSize;
+            if (needUpdateLayoutAndCamera)
+            {
+                updateElements.UpdateLayoutAndCamera();
+                needUpdateLayoutAndCamera = false;
+                needUpdateTexture = true;
+            }
+            else if (needUpdateTexture)
+            {
+                updateElements.UpdateTexture();
+                needUpdateTexture = false;
+            }
+        }
+
+        void OnValidate()
+        {
+            Render();
+        }
+
+        public void Render()
+        {
+            needUpdateLayoutAndCamera = true;
         }
     }
 }
