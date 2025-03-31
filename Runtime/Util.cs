@@ -1,9 +1,9 @@
 using System.Collections.Generic;
+using UnityEngine;
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.Animations;
-using UnityEngine;
 
-#if UNITY_EDITOR
 namespace Narazaka.VRChat.AvatarStatusWindowMaker
 {
     public static class Util
