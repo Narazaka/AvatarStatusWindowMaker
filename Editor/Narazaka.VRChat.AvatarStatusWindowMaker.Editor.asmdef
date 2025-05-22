@@ -4,7 +4,8 @@
     "references": [
         "nadena.dev.ndmf",
         "nadena.dev.modular-avatar.core",
-        "Narazaka.VRChat.AvatarStatusWindowMaker"
+        "Narazaka.VRChat.AvatarStatusWindowMaker",
+        "nadena.dev.ndmf.vrchat"
     ],
     "includePlatforms": [
         "Editor"
