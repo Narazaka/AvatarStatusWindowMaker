@@ -28,6 +28,11 @@ menuってやつをオンにするとメニューから数値が弄れるよう�
 - 数字をシェーダーで書いてるのでデフォルトのアバターセーフティーだとTrustedでないと正しく表示されないです。
 - 使用コンポーネントの関係上そのままだとアップロードボタンを押せないので、[Upload without pre-check](https://github.com/Sayamame-beans/Upload-without-preCheck)とかのツールを使って頑張ってアップロードして下さい。
 
+## Changelog
+
+- 0.1.9:
+  - Compressed Parametersと連携してパラメーター圧縮する機能を追加
+
 ## License
 
 [Zlib License](LICENSE.txt)

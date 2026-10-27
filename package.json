@@ -1,6 +1,6 @@
 {
   "name": "net.narazaka.vrchat.avatar-status-window-maker",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "displayName": "Avatar Status Window Maker",
   "description": "VRChatアバター用にゲームのキャラクターステータスウインドウみたいなやつを作るやつ",
   "author": {
@@ -8,6 +8,7 @@
     "url": "https://github.com/Narazaka"
   },
   "license": "Zlib",
+  "changelogUrl": "https://github.com/Narazaka/AvatarStatusWindowMaker#changelog",
   "type": "tool",
   "url" : "https://github.com/Narazaka/AvatarStatusWindowMaker.git",
   "vpmDependencies": {
