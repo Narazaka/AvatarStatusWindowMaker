@@ -1,3 +1,4 @@
+using nadena.dev.modular_avatar.core;
 using nadena.dev.ndmf;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -18,9 +19,9 @@ namespace Narazaka.VRChat.AvatarStatusWindowMaker.Editor
 
         public IEnumerable<ProvidedParameter> GetSuppliedParameters(BuildContext context = null)
         {
-            return WindowMaker.statuses.Where(status => status.menu).Select(status => new ProvidedParameter($"NumberRate_{status.name}", ParameterNamespace.Animator, WindowMaker, AvatarStatusWindowMakerPlugin.Instance, AnimatorControllerParameterType.Float)
+            return WindowMaker.statuses.Where(status => status.menu).SelectMany(AvatarStatusWindowMakerPlugin.StatusParameterConfigs).Select(p => new ProvidedParameter(p.remapTo, ParameterNamespace.Animator, WindowMaker, AvatarStatusWindowMakerPlugin.Instance, p.syncType == ParameterSyncType.Bool ? AnimatorControllerParameterType.Bool : AnimatorControllerParameterType.Float)
             {
-                WantSynced = true,
+                WantSynced = !p.localOnly,
             });
         }
 

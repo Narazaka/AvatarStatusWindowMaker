@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using nadena.dev.ndmf;
@@ -19,7 +20,7 @@ namespace Narazaka.VRChat.AvatarStatusWindowMaker.Editor
 
         protected override void Configure()
         {
-            InPhase(BuildPhase.Generating).BeforePlugin("nadena.dev.modular-avatar").Run("Avatar Status Window Maker", (context) =>
+            InPhase(BuildPhase.Generating).BeforePlugin("nadena.dev.modular-avatar").BeforePlugin("net.narazaka.vrchat.compressed-int-parameters").Run("Avatar Status Window Maker", (context) =>
             {
                 var avatarStatusWindowMakers = context.AvatarRootTransform.GetComponentsInChildren<AvatarStatusWindowMaker>(true);
                 foreach (var avatarStatusWindowMaker in avatarStatusWindowMakers)
@@ -108,18 +109,22 @@ namespace Narazaka.VRChat.AvatarStatusWindowMaker.Editor
                         mergeAnimator.layerType = VRC.SDK3.Avatars.Components.VRCAvatarDescriptor.AnimLayerType.FX;
                         mergeAnimator.matchAvatarWriteDefaults = true;
                         mergeAnimator.pathMode = MergeAnimatorPathMode.Relative;
-                        var parameters = valueModel.AddComponent<ModularAvatarParameters>();
-                        parameters.parameters = new()
+#if HAS_COMPRESSED_INT_PARAMETERS
+                        var compressed = StatusCompressedParameterConfig(status);
+                        if (compressed != null)
                         {
-                            new ()
-                            {
-                                nameOrPrefix = "NumberRate",
-                                syncType = ParameterSyncType.Float,
-                                defaultValue = status.valueRate,
-                                remapTo = $"NumberRate_{status.name}",
-                                saved = status.saved,
-                            },
-                        };
+                            valueModel.AddComponent<Narazaka.VRChat.CompressedIntParameters.CompressedIntParameters>().parameters = new() { compressed };
+                            // 暫定対処: シェーダーは切り捨て表示、圧縮は最寄りの刻みへの丸めなので、min/maxを+0.5して表示を四捨五入に揃える。本来はシェーダー側で丸め方を選べるようにすべき
+                            var valueRenderer = valueModel.GetComponent<Renderer>();
+                            valueRenderer.sharedMaterial = new Material(valueRenderer.sharedMaterial);
+                            valueRenderer.sharedMaterial.SetFloat("_MinNumber", status.min + 0.5f);
+                            valueRenderer.sharedMaterial.SetFloat("_MaxNumber", status.max + 0.5f);
+                        }
+                        else
+#endif
+                        {
+                            valueModel.AddComponent<ModularAvatarParameters>().parameters = new() { StatusParameterConfig(status) };
+                        }
                         var menuObj = new GameObject(status.name);
                         menuObj.transform.SetParent(allMenuGroup);
                         var menu = menuObj.AddComponent<ModularAvatarMenuItem>();
@@ -137,6 +142,34 @@ namespace Narazaka.VRChat.AvatarStatusWindowMaker.Editor
                     Object.DestroyImmediate(avatarStatusWindowMaker);
                 }
             });
+        }
+
+        internal static ParameterConfig StatusParameterConfig(AvatarStatus status) => new()
+        {
+            nameOrPrefix = "NumberRate",
+            syncType = ParameterSyncType.Float,
+            defaultValue = status.valueRate,
+            remapTo = $"NumberRate_{status.name}",
+            saved = status.saved,
+        };
+
+#if HAS_COMPRESSED_INT_PARAMETERS
+        internal static bool CanCompress(int stepCount) => stepCount >= 2 && stepCount <= 128;
+
+        internal static Narazaka.VRChat.CompressedIntParameters.CompressedParameterConfig StatusCompressedParameterConfig(AvatarStatus status)
+        {
+            if (status.noCompress || !CanCompress(status.stepCount)) return null;
+            return Narazaka.VRChat.CompressedIntParameters.CompressedParameterConfig.From(StatusParameterConfig(status), status.stepCount, 0f, 1f);
+        }
+#endif
+
+        internal static IEnumerable<ParameterConfig> StatusParameterConfigs(AvatarStatus status)
+        {
+#if HAS_COMPRESSED_INT_PARAMETERS
+            var compressed = StatusCompressedParameterConfig(status);
+            if (compressed != null) return compressed.ToParameterConfigs();
+#endif
+            return new[] { StatusParameterConfig(status) };
         }
 
         Vector3 PositionOfRectTransform(Transform transform)

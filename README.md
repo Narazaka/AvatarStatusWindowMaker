@@ -20,6 +20,8 @@ AvatarStatusWindowMakerプレハブを突っ込んでよしなにする。
 
 menuってやつをオンにするとメニューから数値が弄れるようになる。
 
+[Compressed Parameters](https://github.com/Narazaka/CompressedIntParameters) (1.1.1以上) が入っていると、同期パラメーターのbit数を削減できます。
+
 クソ雑注意書き:
 
 - Floatパラメーターの精度的に数値のminとmaxが256以上離れていると1ずつ調整は出来ないです。

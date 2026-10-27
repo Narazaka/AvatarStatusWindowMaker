@@ -5,7 +5,8 @@
         "nadena.dev.ndmf",
         "nadena.dev.modular-avatar.core",
         "Narazaka.VRChat.AvatarStatusWindowMaker",
-        "nadena.dev.ndmf.vrchat"
+        "nadena.dev.ndmf.vrchat",
+        "Narazaka.VRChat.CompressedIntParameters"
     ],
     "includePlatforms": [
         "Editor"
@@ -16,6 +17,12 @@
     "precompiledReferences": [],
     "autoReferenced": false,
     "defineConstraints": [],
-    "versionDefines": [],
+    "versionDefines": [
+        {
+            "name": "net.narazaka.vrchat.compressed-int-parameters",
+            "expression": "[1.1.1,2)",
+            "define": "HAS_COMPRESSED_INT_PARAMETERS"
+        }
+    ],
     "noEngineReferences": false
 }
