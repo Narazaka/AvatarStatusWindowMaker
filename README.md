@@ -29,6 +29,11 @@ menuってやつをオンにするとメニューから数値が弄れるよう�
 
 ## Changelog
 
+- 0.2.0:
+  - Upload without pre-check等を使わずにアップロード出来るように
+  - NDMF 1.8.0以上が必要になりました
+  - ビルド後の数値表示オブジェクトの階層を変更（`AvatarStatusWindowMaker/Values/<ステータス名>`）
+  - ビルド後にシーン上のマテリアルがmissingになる問題を修正
 - 0.1.9:
   - Compressed Parametersと連携してパラメーター圧縮する機能を追加
 
