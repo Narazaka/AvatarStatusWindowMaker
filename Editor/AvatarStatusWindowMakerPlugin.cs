@@ -31,6 +31,8 @@ namespace Narazaka.VRChat.AvatarStatusWindowMaker.Editor
                         var valueModel = statusLine.Find("Value/ValueModel");
                         valueModel.name = statusLine.name;
                         valueModel.SetParent(valuesContainer, true);
+                        var valueRenderer = valueModel.GetComponent<Renderer>();
+                        valueRenderer.sharedMaterial = new Material(valueRenderer.sharedMaterial);
                     }
                 }
             });
@@ -41,7 +43,7 @@ namespace Narazaka.VRChat.AvatarStatusWindowMaker.Editor
                 {
                     var mesh = avatarStatusWindowMaker.transform.Find("Mesh").GetComponent<MeshRenderer>();
                     var valuesContainer = avatarStatusWindowMaker.transform.Find("Values");
-                    var texture = mesh.sharedMaterial.mainTexture as Texture2D;
+                    var texture = Object.Instantiate(mesh.sharedMaterial.mainTexture) as Texture2D;
                     EditorUtility.CompressTexture(texture, TextureFormat.DXT1, TextureCompressionQuality.Normal);
                     texture.Apply(true, true);
                     var textureSo = new SerializedObject(texture);
@@ -50,7 +52,7 @@ namespace Narazaka.VRChat.AvatarStatusWindowMaker.Editor
                     //UnityEngine.Object.DestroyImmediate(texture);
 
                     var meshRenderer = mesh.GetComponent<MeshRenderer>();
-                    meshRenderer.sharedMaterial.mainTexture = texture;
+                    meshRenderer.sharedMaterial = new Material(meshRenderer.sharedMaterial) { mainTexture = texture };
                     mesh.gameObject.SetActive(true);
 
                     var allMenuGroup = avatarStatusWindowMaker.transform.Find("Menu");
@@ -71,7 +73,6 @@ namespace Narazaka.VRChat.AvatarStatusWindowMaker.Editor
                             valueModel.AddComponent<Narazaka.VRChat.CompressedIntParameters.CompressedIntParameters>().parameters = new() { compressed };
                             // 暫定対処: シェーダーは切り捨て表示、圧縮は最寄りの刻みへの丸めなので、min/maxを+0.5して表示を四捨五入に揃える。本来はシェーダー側で丸め方を選べるようにすべき
                             var valueRenderer = valueModel.GetComponent<Renderer>();
-                            valueRenderer.sharedMaterial = new Material(valueRenderer.sharedMaterial);
                             valueRenderer.sharedMaterial.SetFloat("_MinNumber", status.min + 0.5f);
                             valueRenderer.sharedMaterial.SetFloat("_MaxNumber", status.max + 0.5f);
                         }
