@@ -26,7 +26,6 @@ menuってやつをオンにするとメニューから数値が弄れるよう�
 
 - Floatパラメーターの精度的に数値のminとmaxが256以上離れていると1ずつ調整は出来ないです。
 - 数字をシェーダーで書いてるのでデフォルトのアバターセーフティーだとTrustedでないと正しく表示されないです。
-- 使用コンポーネントの関係上そのままだとアップロードボタンを押せないので、[Upload without pre-check](https://github.com/Sayamame-beans/Upload-without-preCheck)とかのツールを使って頑張ってアップロードして下さい。
 
 ## Changelog
 
