@@ -19,20 +19,23 @@ namespace Narazaka.VRChat.AvatarStatusWindowMaker.Editor
 
         protected override void Configure()
         {
-            InPhase(BuildPhase.FirstChance).Run("Avatar Status Window Maker: Move Values", (context) =>
+            InPhase(BuildPhase.FirstChance).Run("Avatar Status Window Maker: Capture", (context) =>
             {
                 var avatarStatusWindowMakers = context.AvatarRootTransform.GetComponentsInChildren<AvatarStatusWindowMaker>(true);
                 foreach (var avatarStatusWindowMaker in avatarStatusWindowMakers)
                 {
+                    Capture(avatarStatusWindowMaker);
                     var valuesContainer = new GameObject("Values").transform;
                     valuesContainer.SetParent(avatarStatusWindowMaker.transform, false);
                     foreach (Transform statusLine in avatarStatusWindowMaker.transform.Find("Canvas/Container/StatusLines"))
                     {
+                        if (PrefabUtility.IsPartOfPrefabInstance(statusLine))
+                        {
+                            PrefabUtility.UnpackPrefabInstance(PrefabUtility.GetOutermostPrefabInstanceRoot(statusLine), PrefabUnpackMode.Completely, InteractionMode.AutomatedAction);
+                        }
                         var valueModel = statusLine.Find("Value/ValueModel");
                         valueModel.name = statusLine.name;
                         valueModel.SetParent(valuesContainer, true);
-                        var valueRenderer = valueModel.GetComponent<Renderer>();
-                        valueRenderer.sharedMaterial = new Material(valueRenderer.sharedMaterial);
                     }
                 }
             });
@@ -43,7 +46,7 @@ namespace Narazaka.VRChat.AvatarStatusWindowMaker.Editor
                 {
                     var mesh = avatarStatusWindowMaker.transform.Find("Mesh").GetComponent<MeshRenderer>();
                     var valuesContainer = avatarStatusWindowMaker.transform.Find("Values");
-                    var texture = Object.Instantiate(mesh.sharedMaterial.mainTexture) as Texture2D;
+                    var texture = mesh.sharedMaterial.mainTexture as Texture2D;
                     EditorUtility.CompressTexture(texture, TextureFormat.DXT1, TextureCompressionQuality.Normal);
                     texture.Apply(true, true);
                     var textureSo = new SerializedObject(texture);
@@ -52,7 +55,7 @@ namespace Narazaka.VRChat.AvatarStatusWindowMaker.Editor
                     //UnityEngine.Object.DestroyImmediate(texture);
 
                     var meshRenderer = mesh.GetComponent<MeshRenderer>();
-                    meshRenderer.sharedMaterial = new Material(meshRenderer.sharedMaterial) { mainTexture = texture };
+                    meshRenderer.sharedMaterial.mainTexture = texture;
                     mesh.gameObject.SetActive(true);
 
                     var allMenuGroup = avatarStatusWindowMaker.transform.Find("Menu");
@@ -98,6 +101,40 @@ namespace Narazaka.VRChat.AvatarStatusWindowMaker.Editor
                     Object.DestroyImmediate(avatarStatusWindowMaker);
                 }
             });
+        }
+
+        static void Capture(AvatarStatusWindowMaker avatarStatusWindowMaker)
+        {
+            var transform = avatarStatusWindowMaker.transform;
+            foreach (Transform statusLine in transform.Find("Canvas/Container/StatusLines"))
+            {
+                statusLine.Find("Value/ValueModel").GetComponent<Renderer>().sharedMaterial = null;
+            }
+            transform.Find("Mesh").GetComponent<Renderer>().sharedMaterial = null;
+            var camera = transform.Find("Camera").GetComponent<Camera>();
+            camera.targetTexture = null;
+
+            var parent = transform.parent;
+            var siblingIndex = transform.GetSiblingIndex();
+            var position = transform.position;
+            transform.SetParent(null, true);
+            transform.position = position + Vector3.up * 1000;
+            avatarStatusWindowMaker.gameObject.SetActive(true);
+
+            camera.orthographicSize = avatarStatusWindowMaker.orthographicSize;
+            var updateElements = new UpdateElements(avatarStatusWindowMaker);
+            updateElements.UpdateLayoutAndCamera();
+            Canvas.ForceUpdateCanvases();
+            camera.Render();
+            updateElements.UpdateTexture();
+
+            var renderTexture = camera.targetTexture;
+            camera.targetTexture = null;
+            Object.DestroyImmediate(renderTexture);
+
+            transform.position = position;
+            transform.SetParent(parent, true);
+            transform.SetSiblingIndex(siblingIndex);
         }
 
         internal static ParameterConfig StatusParameterConfig(AvatarStatus status) => new()

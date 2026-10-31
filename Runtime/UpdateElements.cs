@@ -123,6 +123,7 @@ namespace Narazaka.VRChat.AvatarStatusWindowMaker
             SynchronizationContext.Current.Send(async state =>
             {
                 await Task.Delay(100);
+                if (statusLinesContainer == null) return;
                 Debug.Log("Object.DestroyImmediate");
                 Debug.Log(statusLinesContainer);
                 var layout = statusLinesContainer.GetComponent<VerticalLayoutGroup>();
